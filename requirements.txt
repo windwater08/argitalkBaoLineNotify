@@ -1,5 +1,4 @@
 flask
-BeautifulSoup
 requests
 json
 twstock
