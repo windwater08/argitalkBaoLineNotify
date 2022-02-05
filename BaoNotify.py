@@ -26,7 +26,7 @@ while 1:
     messagejson= json.dumps(response.json())
     messagejson= response.json()
     """
-    message="當前資訊如下"
+    message="交大寶山農場, 當前資訊如下"
     for key in messagejson:
         message= (message + ", 感測時間: " + messagejson[key][0][0] + 
         ", 感測內容: " + key + 
@@ -43,7 +43,7 @@ while 1:
     
     time.sleep(5)
     """
-    message="最近72小時的平均資訊如下"
+    message="交大寶山農場, 最近72小時的平均資訊如下"
     for key in messagejson:
         totalvaluemean =0.0
         for value in messagejson[key]:
