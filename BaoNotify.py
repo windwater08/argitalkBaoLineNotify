@@ -19,7 +19,7 @@ def lineNotifyMessage(token, msg):
 sqllimit = "12960"
 #sqllimit = "2"
 while 1: 
-
+    token = 'ZTe5KnneRuHVnY1Nx7BcejgaD55Fd2sCmOypAdbA0NW'
     # 你要傳送的訊息內容
     #response = requests.get("https://sdsql.iottalk.tw/demo/datas/bao1?limit="+sqllimit+"&token=bao1")
     response = requests.get("https://sql.iottalk.tw/api/demo/datas/NanM21?limit="+sqllimit+"&token=4ce2db7c-ce27-43fe-b99b-e52d09c15c1f")
@@ -27,8 +27,8 @@ while 1:
     #print(response.json())
     messagejson= json.dumps(response.json())
     messagejson= response.json()
-    
-    message="南庄農場, 當前資訊如下"
+    """"""
+    message="提醒您當前南庄農場感測資訊如下： \n"
     for key in messagejson:
         
         if key == "Ovum-O":
@@ -37,22 +37,15 @@ while 1:
             continue
         if len(messagejson[key]) ==0:
             continue
-        message= (message + ", 感測時間: " + messagejson[key][0][0] + 
-        ", 感測內容: " + key + 
-        ", 感測數值: " + str(messagejson[key][0][1]) + ",\n")
+        message= (message + "時間: " + messagejson[key][0][0] + 
+        ", 項目: " + key + 
+        ", 數值: " + str(messagejson[key][0][1]) + ", \n")
     
-    #token = 'DzzSaeYbqY2W3H5RaCFt2JNi1Ld3f3p707ci0AvkaRn'
-    #lineNotifyMessage(token, message)
-    
-    token = '7QyeLrwmlZhQnutG6hijKkps0kYDqMBYmhsM05GeqQk'
     lineNotifyMessage(token, message)
-    
-    #token = 'EooumEM2JGSrp5o7XFktmO6edXh6dQwzSkCF2b2Esuu'
-    #lineNotifyMessage(token, message)
     
     time.sleep(5)
     
-    message="南庄農場, 最近72小時的平均資訊如下"
+    message="提醒您當前南庄農場， \n"
     for key in messagejson:
         totalvaluemean =0.0
         if key == "Ovum-O":
@@ -63,9 +56,9 @@ while 1:
             totalvaluemean = totalvaluemean/int(sqllimit)
             #print(totalvaluemean)
             if(totalvaluemean < 80.0):
-                message= (message + ", 卵孵化率 (%): " + '%.4f'%totalvaluemean + ", 為安全值 \n")
+                message= (message + "蟲害可能發生率 (%): " + '%.4f'%totalvaluemean + ", \n")
             else:
-                message= (message + ", 卵孵化率 (%): " + '%.4f'%totalvaluemean + ", 已經越過安全值請注意 \n")
+                message= (message + "蟲害可能發生率 (%): " + '%.4f'%totalvaluemean + ", 已經越過安全值請注意, \n")
         if key == "Spore-O":
             if len(messagejson[key]) ==0:
                 continue
@@ -74,12 +67,10 @@ while 1:
             totalvaluemean = totalvaluemean/int(sqllimit)
             #print(totalvaluemean)
             if(totalvaluemean < 80.0):
-                message= (message + ", 孢子發芽率 (%): " + '%.4f'%totalvaluemean + ", 為安全值 \n")
+                message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + ", \n")
             else:
-                message= (message + ", 孢子發芽率 (%): " + '%.4f'%totalvaluemean + ", 已經越過安全值請注意 \n")
+                message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + ", 已經越過安全值請注意。 \n")
         
-
-    token = '7QyeLrwmlZhQnutG6hijKkps0kYDqMBYmhsM05GeqQk'
     lineNotifyMessage(token, message)
     
     
