@@ -20,6 +20,7 @@ DataDict["token"] = ["ZTe5KnneRuHVnY1Nx7BcejgaD55Fd2sCmOypAdbA0NW","U1LK4sv4fpcj
 DataDict["url"] = ["https://sql.iottalk.tw/api/demo/datas/NanM21?limit="+sqllimit+"&token=4ce2db7c-ce27-43fe-b99b-e52d09c15c1f",
                   "https://dash1.iottalk.tw/demo/datas/FuLiangTian_M2?limit="+sqllimit+"&token=FuLiangTian_M2"]
 DataDict["Ovum"] = [1,0]
+DataDict["Spore"] = [1,0]
 
 sched = BlockingScheduler()
 
@@ -66,7 +67,7 @@ def lineNotifyJob():
         message="提醒您當前" + DataDict["field"][i] + "， \n"
         for key in messagejson:
             totalvaluemean =0.0
-            if DataDict["Ovum"][i] == 1:
+            if DataDict["Spore"][i] == 1:
                 if key == "Ovum-O":
                     if len(messagejson[key]) == 0:
                         continue
@@ -89,7 +90,7 @@ def lineNotifyJob():
                         message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + ", \n")
                     else:
                         message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + ", 已經越過安全值請注意。 \n")
-            elif DataDict["Ovum"][i] == 0:
+            elif DataDict["Spore"][i] == 0:
                 if key == "Temperature-O":
                     if len(messagejson["Temperature-O"]) != int(sqllimit):
                         continue
@@ -108,9 +109,9 @@ def lineNotifyJob():
                     totalvaluemean = totalvaluemean/int(sqllimit)
                     #print(totalvaluemean)
                     if(totalvaluemean < 80.0):
-                        message= (message + "蟲害可能發生率 (%): " + '%.4f'%totalvaluemean + ", \n")
+                        message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + ", \n")
                     else:
-                        message= (message + "蟲害可能發生率 (%): " + '%.4f'%totalvaluemean + ", 已經越過安全值請注意, \n")
+                        message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + ", 已經越過安全值請注意, \n")
                 
         lineNotifyMessage(token, message)
 
