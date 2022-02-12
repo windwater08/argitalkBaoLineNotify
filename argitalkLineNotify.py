@@ -116,7 +116,7 @@ def lineNotifyJob():
             lineNotifyMessage(token, message)
         
         
-        time.sleep(20)
+        time.sleep(3600)
 
 @app.route("/")
 def hello():
@@ -126,6 +126,7 @@ def main():
     app.run('', port=60000, debug=False, threaded=True)
     
 if __name__ == '__main__':
+    """
     print("start runing")
     # 建立一個子執行緒
     t = threading.Thread(target = lineNotifyJob)
@@ -133,5 +134,5 @@ if __name__ == '__main__':
     t.daemon=True 
     # 執行該子執行緒
     t.start()
-    
+    """
     main()
