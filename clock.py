@@ -114,7 +114,7 @@ def lineNotifyJob():
                 
         lineNotifyMessage(token, message)
 
-@sched.scheduled_job('cron', minute='*/29')
+@sched.scheduled_job('cron', minute='*/30')
 def scheduled_job():
     print('========== APScheduler CRON =========')
     # 馬上讓我們瞧瞧
