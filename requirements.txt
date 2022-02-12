@@ -1,3 +1,13 @@
-flask
-requests
 twstock
+gunicorn
+PyMySQL
+sqlalchemy
+requests
+flask
+python-dateutil
+pymysql
+sqlalchemy-utils
+schedule
+APScheduler
+Flask-SQLAlchemy
+schedule
