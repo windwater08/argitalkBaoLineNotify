@@ -100,8 +100,8 @@ def lineNotifyJob():
                             temperature  = messagejson["Temperature-O"][j][1]
                             humidity = messagejson["Humidity-O"][j][1]
                             humidity = humidity/100
-                            FT = -0.0625*temperature**3+2.9974*temperature**2-37.865*temperature+141.68
-                            FH = 316.88*humidity-216.88
+                            FT = -0.0078*temperature**3+0.2806*temperature**2+1.6665*temperature+0.27
+                            FH = 0.1143*math.exp(6.6027*humidity)
                             FT =FT/100
                             FH =FH/100
                             FO =FT*FH*100
