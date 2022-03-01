@@ -115,11 +115,11 @@ def lineNotifyJob():
                 
         lineNotifyMessage(token, message)
 
-@sched.scheduled_job('cron', minute='*/30')
+@sched.scheduled_job('cron', minute='*/15')
 def scheduled_job():
     print('========== APScheduler CRON =========')
     # 馬上讓我們瞧瞧
-    print('This job runs every day */30 min.')
+    print('This job runs every day */15 min.')
     # 利用datetime查詢時間
     #print(f'{datetime.datetime.now().ctime()}')
     #print(f'{datetime.now().ctime()}')
@@ -132,9 +132,9 @@ def scheduled_job():
     conn = urllib.request.urlopen(url)
     hour   = dt2.hour
     minute = dt2.minute
-    if hour==8 and minute < 30:
+    if hour==8 and minute < 15:
         lineNotifyJob()
-    elif hour==20 and minute < 30:
+    elif hour==20 and minute < 15:
         lineNotifyJob()
     
 scheduled_job()
