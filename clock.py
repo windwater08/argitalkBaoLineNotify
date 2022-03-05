@@ -183,6 +183,5 @@ def scheduled_job():
     elif (hour % 3 == 0) and minute < 15:
         lineNotifyJob("花壇鄉")
     
-#lineNotifyJob("花壇鄉")
 scheduled_job()
 sched.start()
