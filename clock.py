@@ -163,11 +163,11 @@ def lineNotifyJob(field):
                 message = message + "本預報有效期間至" + predictdateline + "為止。"
     lineNotifyMessage(token, message)
 
-@sched.scheduled_job('cron', minute='*/15')
+@sched.scheduled_job('cron', minute='*/20')
 def scheduled_job():
     print('========== APScheduler CRON =========')
     # 馬上讓我們瞧瞧
-    print('This job runs every day */15 min.')
+    print('This job runs every day */20 min.')
     # 利用datetime查詢時間
     #print(f'{datetime.datetime.now().ctime()}')
     #print(f'{datetime.now().ctime()}')
@@ -180,13 +180,13 @@ def scheduled_job():
     conn = urllib.request.urlopen(url)
     hour   = dt2.hour
     minute = dt2.minute
-    if hour==8 and minute < 15:
+    if hour==8 and minute < 20:
         lineNotifyJob("南庄農場")
         lineNotifyJob("富良田農場")
-    if hour==20 and minute < 15:
+    if hour==20 and minute < 20:
         lineNotifyJob("南庄農場")
         lineNotifyJob("富良田農場")
-    if (hour % 3 == 0) and minute < 15:
+    if (hour % 3 == 0) and minute < 20:
         lineNotifyJob("花壇鄉")
     
 #lineNotifyJob("花壇鄉")
