@@ -45,25 +45,26 @@ def lineNotifyMessage(token, msg):
 
 def lineNotifyJob(field):
 
-#for i in range(0, len(DataDict["field"])):
-    i = DataDict["field"].index(field)
+#for index in range(0, len(DataDict["field"])):
+    index = DataDict["field"].index(field)
     nowtime = datetime.utcnow().replace(tzinfo=timezone.utc).astimezone(timezone(timedelta(hours=8))) # 轉換時區 -> 東八區
+    compartime = nowtime.strftime("%Y-%m-%d %H:%M:%S")
     nowtime = nowtime.strftime("%Y-%m-%dT%H:%M:%S")
     print(nowtime)
-    token = DataDict["token"][i];
+    token = DataDict["token"][index];
     # 你要傳送的訊息內容
     #response = requests.get("https://sdsql.iottalk.tw/demo/datas/bao1?limit="+sqllimit+"&token=bao1")
     #response = requests.get("https://sql.iottalk.tw/api/demo/datas/NanM21?limit="+sqllimit+"&token=4ce2db7c-ce27-43fe-b99b-e52d09c15c1f")
-    if(DataDict["Ovum"][i] != 2):
-        response = requests.get(DataDict["url"][i])
+    if(DataDict["Ovum"][index] != 2):
+        response = requests.get(DataDict["url"][index])
     else:
-        response = requests.get(DataDict["url"][i]+nowtime)
+        response = requests.get(DataDict["url"][index]+nowtime)
     #print(response.json())
 
     messagejson= json.dumps(response.json())
     messagejson= response.json()
     """
-    message="提醒您當前" + DataDict["field"][i] + "感測資訊如下： \n"
+    message="提醒您當前" + DataDict["field"][index] + "感測資訊如下： \n"
     for key in messagejson:
         
         if key == "Ovum-O":
@@ -80,10 +81,10 @@ def lineNotifyJob(field):
     
     time.sleep(5)
     """
-    message="提醒您當前" + DataDict["field"][i] + "， \n"
+    message="提醒您當前" + DataDict["field"][index] + "， \n"
     for key in messagejson:
         totalvaluemean =0.0
-        if DataDict["Spore"][i] == 0:
+        if DataDict["Spore"][index] == 0:
             if key == "Ovum-O":
                 if len(messagejson[key]) == 0:
                     continue
@@ -106,7 +107,7 @@ def lineNotifyJob(field):
                     message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + "。 \n")
                 else:
                     message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + ", 已經越過安全值請注意。 \n")
-        elif DataDict["Spore"][i] == 1:
+        elif DataDict["Spore"][index] == 1:
             if key == "Temperature-O":
                 if len(messagejson["Temperature-O"]) != int(sqllimit):
                     continue
@@ -128,16 +129,21 @@ def lineNotifyJob(field):
                     message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + "。 \n")
                 else:
                     message= (message + "病害可能發生率 (%): " + '%.4f'%totalvaluemean + ", 已經越過安全值請注意。 \n")
-        elif DataDict["Spore"][i] == 2:
+        elif DataDict["Spore"][index] == 2:
+            i = 0
             if key == "records":
                 #print('messagejson["records"]["locations"][0]["location"][0]["weatherElement"][0]["time"][0]["elementValue"][0]["value"]:'+
                 #        json.dumps(messagejson["records"]["locations"][0]["location"][0]["weatherElement"][0]["time"][0]["elementValue"][0]["value"]))
                 #print('messagejson["records"]["locations"][0]["location"]["weatherElement"]:'+messagejson["records"]["locations"][0]["location"]["weatherElement"])
-                print(DataDict["url"][i]+nowtime)
-                predictdateline = messagejson["records"]["locations"][0]["location"][0]["weatherElement"][0]["time"][0]["dataTime"]
-                temperature  = messagejson["records"]["locations"][0]["location"][0]["weatherElement"][0]["time"][0]["elementValue"][0]["value"]
+                print(DataDict["url"][index]+nowtime)
+                predictdateline = messagejson["records"]["locations"][0]["location"][0]["weatherElement"][0]["time"][i]["dataTime"]
+                if time.mktime(datetime.strptime(compartime, "%Y-%m-%d %H:%M:%S").timetuple()) > time.mktime(datetime.strptime(predictdateline, "%Y-%m-%d %H:%M:%S").timetuple()):
+                    print("in time if")
+                    i = i+1
+                    predictdateline = messagejson["records"]["locations"][0]["location"][0]["weatherElement"][0]["time"][i]["dataTime"]
+                temperature  = messagejson["records"]["locations"][0]["location"][0]["weatherElement"][0]["time"][i]["elementValue"][0]["value"]
                 temperature = int(temperature);
-                humidity = messagejson["records"]["locations"][0]["location"][0]["weatherElement"][1]["time"][0]["elementValue"][0]["value"]
+                humidity = messagejson["records"]["locations"][0]["location"][0]["weatherElement"][1]["time"][i]["elementValue"][0]["value"]
                 humidity = int(humidity);
                 humidity = humidity/100
                 FT = -0.0078*temperature**3+0.2806*temperature**2+1.6665*temperature+0.27
@@ -177,11 +183,12 @@ def scheduled_job():
     if hour==8 and minute < 15:
         lineNotifyJob("南庄農場")
         lineNotifyJob("富良田農場")
-    elif hour==20 and minute < 15:
+    if hour==20 and minute < 15:
         lineNotifyJob("南庄農場")
         lineNotifyJob("富良田農場")
-    elif (hour % 3 == 0) and minute < 15:
+    if (hour % 3 == 0) and minute < 15:
         lineNotifyJob("花壇鄉")
     
+#lineNotifyJob("花壇鄉")
 scheduled_job()
 sched.start()
