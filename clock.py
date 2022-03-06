@@ -137,7 +137,7 @@ def lineNotifyJob(field):
                 #print('messagejson["records"]["locations"][0]["location"]["weatherElement"]:'+messagejson["records"]["locations"][0]["location"]["weatherElement"])
                 print(DataDict["url"][index]+nowtime)
                 predictdateline = messagejson["records"]["locations"][0]["location"][0]["weatherElement"][0]["time"][i]["dataTime"]
-                if time.mktime(datetime.strptime(compartime, "%Y-%m-%d %H:%M:%S").timetuple()) > time.mktime(datetime.strptime(predictdateline, "%Y-%m-%d %H:%M:%S").timetuple()):
+                if time.mktime(datetime.strptime(compartime, "%Y-%m-%d %H:%M:%S").timetuple()) >= time.mktime(datetime.strptime(predictdateline, "%Y-%m-%d %H:%M:%S").timetuple()):
                     print("in time if")
                     i = i+1
                     predictdateline = messagejson["records"]["locations"][0]["location"][0]["weatherElement"][0]["time"][i]["dataTime"]
